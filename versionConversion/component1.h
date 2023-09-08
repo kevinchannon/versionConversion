@@ -38,7 +38,8 @@ enum class Comp_1 : std::uint32_t {
   version_241, version_242, version_243, version_244, version_245, version_246, version_247, version_248,
   version_249, version_250, version_251, version_252, version_253, version_254, version_255, version_256,
 
-  count
+  count,
+  latest = count - 1
 };
 
 inline auto operator<<(std::ostream& os, Comp_1 ver) -> std::ostream& {

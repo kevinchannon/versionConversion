@@ -10,7 +10,8 @@ enum class Comp_2 {
   version_33, version_34, version_35, version_36, version_37, version_38, version_39, version_40,
   version_41, version_42, version_43, version_44, version_45, version_46, version_47, version_48,
 
-  count
+  count,
+  latest = count -1
 };
 
 

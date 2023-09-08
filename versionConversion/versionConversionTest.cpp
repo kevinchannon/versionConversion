@@ -8,11 +8,6 @@
 #include <iostream>
 
 namespace {
-  auto comp_1_range(Comp_1 start, Comp_1 end) {
-    using namespace Catch::Generators;
-    return map([](auto&& x) { return Comp_1{ x }; }, range(static_cast<uint32_t>(start), static_cast<uint32_t>(end) + 1));
-  }
-
   auto test_name_from_version(auto val) {
     std::stringstream test_name;
     test_name << val;
@@ -24,8 +19,10 @@ namespace {
 TEST_CASE("Version conversions") {
   auto [function_name, convert_fn] = GENERATE(table<const char*, Comp_2(*)(Comp_1)>({
     {"if-else", to_comp_2_version_with_if},
+    {"if-else (with likely annotated)", to_comp_2_version_with_if_likely_annotated},
     {"range lookup", to_comp_2_version_with_range_lookup},
-    {"unordered map lookup", to_comp_2_version_with_unordered_map}
+    {"unordered map lookup", to_comp_2_version_with_unordered_map},
+    {"unordered map lookup (with shortcut)", to_comp_2_version_with_unordered_map_and_shortcut}
     }));
 
   auto [from_start, from_end, to] = GENERATE(table<Comp_1, Comp_1, Comp_2>({

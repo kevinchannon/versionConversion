@@ -6,16 +6,51 @@
 #include <algorithm>
 #include <iostream>
 
-std::chrono::nanoseconds time_calls(const std::vector<Comp_1>& from_versions, Comp_2(*fn)(Comp_1)) {
-  const auto start = std::chrono::high_resolution_clock::now();
+namespace {
+  std::chrono::nanoseconds time_calls(const std::vector<Comp_1>& from_versions, Comp_2(*fn)(Comp_1)) {
+    const auto start = std::chrono::high_resolution_clock::now();
 
-  for (auto from : from_versions) {
-    volatile auto to = fn(from);
-    (void*)to;
+    for (auto from : from_versions) {
+      volatile auto to = fn(from);
+      (void*)to;
+    }
+
+    const auto stop = std::chrono::high_resolution_clock::now();
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
   }
 
-  const auto stop = std::chrono::high_resolution_clock::now();
-  return std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+  template<typename Generator_T>
+  void run_perf_tests(size_t samples, Generator_T generator, std::mt19937_64& rng) {
+    auto from_versions = std::vector<Comp_1>(samples);
+    std::generate(from_versions.begin(), from_versions.end(), generator);
+
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_if);
+      std::cout << samples << " calls using if-else: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_if_likely_annotated);
+      std::cout << samples << " calls using if-else (with likely annotated): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_range_lookup);
+      std::cout << samples << " calls using range-lookup: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map);
+      std::cout << samples << " calls using unordered map: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map_and_shortcut);
+      std::cout << samples << " calls using unordered map (with shortcut): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
+    std::cout << std::endl;
+  }
 }
 
 int main()
@@ -24,22 +59,20 @@ int main()
   auto choose_random_from_version = std::uniform_int_distribution<uint32_t>{ static_cast<uint32_t>(Comp_1::version_1), static_cast<uint32_t>(Comp_1::count) - 1 };
 
   auto from_versions = std::vector<Comp_1>(1'000'000);
-  std::generate(from_versions.begin(), from_versions.end(), [&]() { return static_cast<Comp_1>(choose_random_from_version(rng));  });
 
-  {
-    const auto duration = time_calls(from_versions, to_comp_2_version_with_if);
-    std::cout << "1 000 000 calls using if-else: " << duration.count() / 1'000'000 << " nanoseconds per call" << std::endl;
-  }
+  std::cout << "99% probability of being latest comp 1 version:" << std::endl;
+  run_perf_tests(10'000'000, [&]() {
+    // Most likely to be the latest version, so 
+    if (choose_random_from_version(rng) > 3) {
+      return static_cast<Comp_1>(static_cast<uint32_t>(Comp_1::count) - 1);
+    }
+    else {
+      return static_cast<Comp_1>(choose_random_from_version(rng));
+    }
+    }, rng);
 
-  {
-    const auto duration = time_calls(from_versions, to_comp_2_version_with_range_lookup);
-    std::cout << "1 000 000 calls using range-lookup: " << duration.count() / 1'000'000 << " nanoseconds per call" << std::endl;
-  }
-
-  {
-    const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map);
-    std::cout << "1 000 000 calls using unordered map: " << duration.count() / 1'000'000 << " nanoseconds per call" << std::endl;
-  }
+  std::cout << "Uniform probablility of any comp 1 version:" << std::endl;
+  run_perf_tests(10'000'000, [&]() { return static_cast<Comp_1>(choose_random_from_version(rng)); }, rng);
 
   return 0;
 }
