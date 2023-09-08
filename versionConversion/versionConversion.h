@@ -66,8 +66,7 @@
   return static_cast<Comp_2>(static_cast<uint32_t>(Comp_2::count) - 1);
 }
 
-[[nodiscard]] constexpr auto to_comp_2_version_with_range_lookup(Comp_1 ver) noexcept -> Comp_2 {
-  constexpr auto lookup = std::array{
+constexpr auto lookup = std::array{
     std::pair{Comp_1::version_1, Comp_2::version_1},
     std::pair{Comp_1::version_2, Comp_2::version_2},
     std::pair{Comp_1::version_12, Comp_2::version_3},
@@ -116,8 +115,9 @@
     std::pair{Comp_1::version_247, Comp_2::version_46},
     std::pair{Comp_1::version_250, Comp_2::version_47},
     std::pair{Comp_1::version_253, Comp_2::version_48},
-  };
+};
 
+[[nodiscard]] constexpr auto to_comp_2_version_with_range_lookup(Comp_1 ver) noexcept -> Comp_2 {
   static_assert(static_cast<size_t>(Comp_2::count) == lookup.size(), "Invalid Comp 2 count. Check array above");
 
   const auto mapping = std::ranges::lower_bound(lookup, ver, std::less_equal<Comp_1>{}, [](auto&& m) {return m.first; });
