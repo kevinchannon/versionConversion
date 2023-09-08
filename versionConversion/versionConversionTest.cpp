@@ -24,7 +24,8 @@ namespace {
 TEST_CASE("Version conversions") {
   auto [function_name, convert_fn] = GENERATE(table<const char*, Comp_2(*)(Comp_1)>({
     {"if-else", to_comp_2_version_with_if},
-    {"range lookup", to_comp_2_version_with_range_lookup}
+    {"range lookup", to_comp_2_version_with_range_lookup},
+    {"unordered map lookup", to_comp_2_version_with_unordered_map}
     }));
 
   auto [from_start, from_end, to] = GENERATE(table<Comp_1, Comp_1, Comp_2>({

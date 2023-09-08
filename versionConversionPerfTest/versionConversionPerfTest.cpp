@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <iostream>
 
-std::chrono::microseconds time_calls(const std::vector<Comp_1>& from_versions, Comp_2(*fn)(Comp_1)) {
+std::chrono::nanoseconds time_calls(const std::vector<Comp_1>& from_versions, Comp_2(*fn)(Comp_1)) {
   const auto start = std::chrono::high_resolution_clock::now();
 
   for (auto from : from_versions) {
@@ -15,7 +15,7 @@ std::chrono::microseconds time_calls(const std::vector<Comp_1>& from_versions, C
   }
 
   const auto stop = std::chrono::high_resolution_clock::now();
-  return std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+  return std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
 }
 
 int main()
@@ -28,12 +28,17 @@ int main()
 
   {
     const auto duration = time_calls(from_versions, to_comp_2_version_with_if);
-    std::cout << "1 000 000 calls using if-else: " << duration.count() << " microseconds" << std::endl;
+    std::cout << "1 000 000 calls using if-else: " << duration.count() / 1'000'000 << " nanoseconds per call" << std::endl;
   }
 
   {
     const auto duration = time_calls(from_versions, to_comp_2_version_with_range_lookup);
-    std::cout << "1 000 000 calls using range-lookup: " << duration.count() << " microseconds" << std::endl;
+    std::cout << "1 000 000 calls using range-lookup: " << duration.count() / 1'000'000 << " nanoseconds per call" << std::endl;
+  }
+
+  {
+    const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map);
+    std::cout << "1 000 000 calls using unordered map: " << duration.count() / 1'000'000 << " nanoseconds per call" << std::endl;
   }
 
   return 0;
