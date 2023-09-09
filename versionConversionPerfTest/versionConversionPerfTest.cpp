@@ -27,55 +27,25 @@ namespace {
     return std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
   }
 
+  void print_result(std::chrono::nanoseconds duration, size_t samples, std::string_view label) {
+    std::cout << samples << " calls using " << label
+              << std::setw(2) << std::setfill(' ') << duration.count() / samples
+              << " ns per call" << std::endl;
+  }
+
   template<typename Generator_T>
   void run_perf_tests(size_t samples, Generator_T generator) {
     auto from_versions = std::vector<Comp_1>(samples);
     std::generate(from_versions.begin(), from_versions.end(), generator);
 
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_if);
-      std::cout << samples << " calls using if-else:\t\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_if_likely_annotated);
-      std::cout << samples << " calls using if-else (with likely annotated):\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_range_lookup);
-      std::cout << samples << " calls using range-lookup:\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map);
-      std::cout << samples << " calls using unordered map:\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map_and_shortcut);
-      std::cout << samples << " calls using unordered map (with shortcut):\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_map);
-      std::cout << samples << " calls using map:\t\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_map_and_shortcut);
-      std::cout << samples << " calls using map (with shortcut):\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_switch_case);
-      std::cout << samples << " calls using switch-case:\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
-
-    {
-      const auto duration = time_calls(from_versions, to_comp_2_version_with_switch_case_annotated);
-      std::cout << samples << " calls using switch-case (with annotation):\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
-    }
+    print_result(time_calls(from_versions, to_comp_2_version_with_if), samples, "if-else:\t\t\t\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_range_lookup), samples, "range-lookup:\t\t\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_unordered_map), samples, "unordered map:\t\t\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_unordered_map_and_shortcut), samples, "unordered map (with shortcut):\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_map), samples, "using map:\t\t\t\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_map_and_shortcut), samples, "map (with shortcut):\t\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_switch_case), samples, "switch-case:\t\t\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_switch_case_annotated), samples, "switch-case (with annotation):\t");
 
     std::cout << std::endl;
   }
