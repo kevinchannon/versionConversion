@@ -49,6 +49,16 @@ namespace {
       std::cout << samples << " calls using unordered map (with shortcut): " << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_map);
+      std::cout << samples << " calls using map: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_map_and_shortcut);
+      std::cout << samples << " calls using map (with shortcut): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
     std::cout << std::endl;
   }
 }

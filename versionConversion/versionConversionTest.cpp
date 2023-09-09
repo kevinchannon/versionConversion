@@ -22,7 +22,9 @@ TEST_CASE("Version conversions") {
     {"if-else (with likely annotated)", to_comp_2_version_with_if_likely_annotated},
     {"range lookup", to_comp_2_version_with_range_lookup},
     {"unordered map lookup", to_comp_2_version_with_unordered_map},
-    {"unordered map lookup (with shortcut)", to_comp_2_version_with_unordered_map_and_shortcut}
+    {"unordered map lookup (with shortcut)", to_comp_2_version_with_unordered_map_and_shortcut},
+    {"map lookup", to_comp_2_version_with_map},
+    {"map lookup (with shortcut)", to_comp_2_version_with_map_and_shortcut}
     }));
 
   auto [from_start, from_end, to] = GENERATE(table<Comp_1, Comp_1, Comp_2>({
