@@ -1,10 +1,18 @@
+#pragma warning( push )
+#pragma warning( disable: 4514) // 'operator <<': unreferenced inline function has been removed
 #include "versionConversion.h"
+#pragma warning( pop )
 
+#pragma warning( push )
+#pragma warning( disable: 4514) // 'operator <<': unreferenced inline function has been removed
+#pragma warning( disable: 5262) // implicit fall-through occurs here
+#pragma warning( disable: 5264) // 'const' variable is not used
 #include <iostream>
 #include <chrono>
 #include <random>
 #include <algorithm>
 #include <iostream>
+#pragma warning( pop )
 
 namespace {
   std::chrono::nanoseconds time_calls(const std::vector<Comp_1>& from_versions, Comp_2(*fn)(Comp_1)) {
@@ -20,7 +28,7 @@ namespace {
   }
 
   template<typename Generator_T>
-  void run_perf_tests(size_t samples, Generator_T generator, std::mt19937_64& rng) {
+  void run_perf_tests(size_t samples, Generator_T generator) {
     auto from_versions = std::vector<Comp_1>(samples);
     std::generate(from_versions.begin(), from_versions.end(), generator);
 
@@ -59,6 +67,16 @@ namespace {
       std::cout << samples << " calls using map (with shortcut): " << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_switch_case);
+      std::cout << samples << " calls using switch-case: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
+    {
+      const auto duration = time_calls(from_versions, to_comp_2_version_with_switch_case_annotated);
+      std::cout << samples << " calls using switch-case (with annotation): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+    }
+
     std::cout << std::endl;
   }
 }
@@ -79,10 +97,10 @@ int main()
     else {
       return static_cast<Comp_1>(choose_random_from_version(rng));
     }
-    }, rng);
+    });
 
   std::cout << "Uniform probablility of any comp 1 version:" << std::endl;
-  run_perf_tests(10'000'000, [&]() { return static_cast<Comp_1>(choose_random_from_version(rng)); }, rng);
+  run_perf_tests(10'000'000, [&]() { return static_cast<Comp_1>(choose_random_from_version(rng)); });
 
   return 0;
 }

@@ -1,6 +1,11 @@
 #pragma once
 
+#pragma warning( push )
+#pragma warning( disable: 4514) // 'operator <<': unreferenced inline function has been removed
+#pragma warning( disable: 5262) // implicit fall-through occurs here
+#pragma warning( disable: 5264) // 'const' variable is not used
 #include <iostream>
+#pragma warning( pop )
 
 enum class Comp_2 {
   version_1, version_2, version_3, version_4, version_5, version_6, version_7, version_8,

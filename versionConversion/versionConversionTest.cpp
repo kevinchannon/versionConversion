@@ -2,10 +2,28 @@
 #include "Component2.h"
 #include "versionConversion.h"
 
+#pragma warning( push )
+#pragma warning( disable: 4365) // 'argument': conversion from 'int' to 'WORD', signed/unsigned mismatch
+#pragma warning( disable: 4514) // 'operator <<': unreferenced inline function has been removed
+#pragma warning( disable: 4583) // Destructor is not implicitly called
+#pragma warning( disable: 4623) // Default constructor was implicitly defined as deleted
+#pragma warning( disable: 4625) // Copy constructor was implicitly defined as deleted
+#pragma warning( disable: 4626) // Assignment operator was implicitly defined as deleted
+#pragma warning( disable: 4820) // 'X' bytes padding added after data member 'Y'
+#pragma warning( disable: 4868) // Compiler may not enforce left-to-right evaluation order in braced initializer list
+#pragma warning( disable: 5026) // Move assignment operator was implicitly defined as deleted
+#pragma warning( disable: 5027) // Move constructor was implicitly defined as deleted
+#pragma warning( disable: 5039) // Pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#pragma warning( disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+#pragma warning( disable: 5204) // class has virtual functions, but its trivial destructor is not virtual;
+#pragma warning( disable: 5219) // Implicit conversion from 'uint64_t' to 'double', possible loss of data
+#pragma warning( disable: 5262) // Implicit fall-through occurs here
+#pragma warning( disable: 5264) // 'const' variable is not used
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
 
 #include <iostream>
+#pragma warning( pop )
 
 namespace {
   auto test_name_from_version(auto val) {
@@ -24,7 +42,9 @@ TEST_CASE("Version conversions") {
     {"unordered map lookup", to_comp_2_version_with_unordered_map},
     {"unordered map lookup (with shortcut)", to_comp_2_version_with_unordered_map_and_shortcut},
     {"map lookup", to_comp_2_version_with_map},
-    {"map lookup (with shortcut)", to_comp_2_version_with_map_and_shortcut}
+    {"map lookup (with shortcut)", to_comp_2_version_with_map_and_shortcut},
+    {"switch-case", to_comp_2_version_with_switch_case},
+    {"switch-case (with likely annotated)", to_comp_2_version_with_switch_case_annotated}
     }));
 
   auto [from_start, from_end, to] = GENERATE(table<Comp_1, Comp_1, Comp_2>({
