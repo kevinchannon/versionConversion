@@ -42,7 +42,7 @@ namespace {
     print_result(time_calls(from_versions, to_comp_2_version_with_range_lookup), samples, "range-lookup:\t\t\t");
     print_result(time_calls(from_versions, to_comp_2_version_with_unordered_map), samples, "unordered map:\t\t\t");
     print_result(time_calls(from_versions, to_comp_2_version_with_unordered_map_and_shortcut), samples, "unordered map (with shortcut):\t");
-    print_result(time_calls(from_versions, to_comp_2_version_with_map), samples, "using map:\t\t\t\t");
+    print_result(time_calls(from_versions, to_comp_2_version_with_map), samples, "map:\t\t\t\t");
     print_result(time_calls(from_versions, to_comp_2_version_with_map_and_shortcut), samples, "map (with shortcut):\t\t");
     print_result(time_calls(from_versions, to_comp_2_version_with_switch_case), samples, "switch-case:\t\t\t");
     print_result(time_calls(from_versions, to_comp_2_version_with_switch_case_annotated), samples, "switch-case (with annotation):\t");
@@ -58,7 +58,9 @@ int main()
 
   auto from_versions = std::vector<Comp_1>(1'000'000);
 
-  std::cout << "99% probability of being latest comp 1 version:" << std::endl;
+  std::cout << "===============================================================================\n" << std::endl;
+
+  std::cout << "99% probability of being latest comp 1 version:\n" << std::endl;
   run_perf_tests(10'000'000, [&]() {
     // Most likely to be the latest version, so 
     if (choose_random_from_version(rng) > 3) {
@@ -69,8 +71,12 @@ int main()
     }
     });
 
-  std::cout << "Uniform probablility of any comp 1 version:" << std::endl;
+  std::cout << "===============================================================================\n" << std::endl;
+
+  std::cout << "Uniform probablility of any comp 1 version:\n" << std::endl;
   run_perf_tests(10'000'000, [&]() { return static_cast<Comp_1>(choose_random_from_version(rng)); });
+
+  std::cout << "===============================================================================\n" << std::endl;
 
   return 0;
 }
