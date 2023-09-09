@@ -34,47 +34,47 @@ namespace {
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_if);
-      std::cout << samples << " calls using if-else: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using if-else:\t\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_if_likely_annotated);
-      std::cout << samples << " calls using if-else (with likely annotated): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using if-else (with likely annotated):\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_range_lookup);
-      std::cout << samples << " calls using range-lookup: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using range-lookup:\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map);
-      std::cout << samples << " calls using unordered map: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using unordered map:\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_unordered_map_and_shortcut);
-      std::cout << samples << " calls using unordered map (with shortcut): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using unordered map (with shortcut):\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_map);
-      std::cout << samples << " calls using map: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using map:\t\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_map_and_shortcut);
-      std::cout << samples << " calls using map (with shortcut): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using map (with shortcut):\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_switch_case);
-      std::cout << samples << " calls using switch-case: " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using switch-case:\t\t\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     {
       const auto duration = time_calls(from_versions, to_comp_2_version_with_switch_case_annotated);
-      std::cout << samples << " calls using switch-case (with annotation): " << duration.count() / samples << " nanoseconds per call" << std::endl;
+      std::cout << samples << " calls using switch-case (with annotation):\t" << std::setw(2) << std::setfill(' ') << duration.count() / samples << " nanoseconds per call" << std::endl;
     }
 
     std::cout << std::endl;
